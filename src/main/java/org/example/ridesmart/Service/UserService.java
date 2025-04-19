@@ -8,6 +8,7 @@ import org.example.ridesmart.Exception.UserAlreadyExistsException;
 import org.example.ridesmart.Exception.UserNotFoundException;
 import org.example.ridesmart.Repositary.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,12 +18,13 @@ public class UserService {
     private UserRepo userRepo;
 
     public UserDetails sign(SignUp sign) {
-        UserDetails check = userRepo.findByEmail(sign.getEmail());
+        boolean check = userRepo.existsByEmail(sign.getEmail());
 
-        if (check == null) {
+        if (!check) {
             UserDetails userDetails = new UserDetails();
             userDetails.setEmail(sign.getEmail());
             userDetails.setPhoneNumber(sign.getPhoneNumber());
+            userDetails.setPassword(new BCryptPasswordEncoder().encode(sign.getPassword()));
             return userRepo.save(userDetails);
         } else {
             throw new UserAlreadyExistsException("User already exists with email: " + sign.getEmail());
@@ -41,8 +43,16 @@ public class UserService {
 
     public UserDetails add(UserDTO userDTO) {
         UserDetails user = new UserDetails();
-        user.setName(userDTO.getName());
-        user.setLocation(userDTO.getLocation());
-        return userRepo.save(user);
+        if(userRepo.existsById(userDTO.getId()))
+        {
+            user.setName(userDTO.getName());
+            user.setLocation(userDTO.getLocation());
+            user.setId(userDTO.getId());
+            return userRepo.save(user);
+        }
+        else
+        {
+            return null;
+        }
     }
 }
