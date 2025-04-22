@@ -30,7 +30,7 @@ public class JwtNewFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.equals("/User/Login") || path.equals("/User/SignUp") || path.equals("/User/profile");
+        return path.equals("/User/Login") || path.equals("/User/SignUp")  || path.equals("/Driver/Login") || path.equals("/User/profile");
     }
 
 

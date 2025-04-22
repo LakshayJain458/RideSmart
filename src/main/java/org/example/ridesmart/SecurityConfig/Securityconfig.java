@@ -47,7 +47,8 @@ public class Securityconfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/User/**").permitAll() // Allow access to /User/** without authentication
+                        .requestMatchers("/User/**").permitAll()
+                        .requestMatchers("/Driver/**").permitAll()// Allow access to /User/** without authentication
                         .anyRequest().authenticated() // Require authentication for other requests
                 ) // <-- Fixed missing closing parenthesis here
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
