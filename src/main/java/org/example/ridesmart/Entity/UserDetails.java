@@ -20,17 +20,5 @@ public class UserDetails {
     private String email;
     private String phoneNumber;
     private String password;
-    private String location;
-
-    private Boolean active;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private DriverProfile driverProfile;
-
-    @OneToOne(mappedBy = "rider", cascade = CascadeType.ALL)
-    private RideProfile rideProfile;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
+    private int No_Ride;
 }

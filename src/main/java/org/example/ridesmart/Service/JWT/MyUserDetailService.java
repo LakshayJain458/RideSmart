@@ -21,15 +21,12 @@ public class MyUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (userRepository.existsByEmail(username)) {
-            // Fetch the user from the repository
             org.example.ridesmart.Entity.UserDetails user = userRepository.findByEmail(username);
 
-            // If user is found, return the user with the email and password (no roles)
             if (user == null) {
                 throw new UsernameNotFoundException("User not found");
             }
 
-            // Return UserDetails with no roles (since there's no role in your case)
             return new org.springframework.security.core.userdetails.User(
                     user.getEmail(),       // Email as username
                     user.getPassword(),    // Password
@@ -48,7 +45,6 @@ public class MyUserDetailService implements UserDetailsService {
                     new ArrayList<>()                // No roles/authorities
             );
         }else {
-            // If the user does not exist, throw an exception
             throw new UsernameNotFoundException("User not found");
         }
     }

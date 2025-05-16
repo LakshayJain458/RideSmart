@@ -14,12 +14,7 @@ public class DriverProfile {
     private String phoneNumber;
     private String password;
     private String location;
-
     private Boolean active;
-
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private UserDetails user;
 
     private String licenseNumber;
     private String vehicleType;

@@ -10,8 +10,6 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
     private String name;
     private Long id;
-    private String location;
-
     public Long getId() {
         return id;
     }
@@ -26,13 +24,5 @@ public class UserDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
     }
 }

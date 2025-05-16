@@ -48,9 +48,10 @@ public class Securityconfig {
         http.csrf().disable()
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/User/**").permitAll()
-                        .requestMatchers("/Driver/**").permitAll()// Allow access to /User/** without authentication
-                        .anyRequest().authenticated() // Require authentication for other requests
-                ) // <-- Fixed missing closing parenthesis here
+                        .requestMatchers("/Driver/**").permitAll()
+                        .requestMatchers("/Ride/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtNewFilter, UsernamePasswordAuthenticationFilter.class); // Add JWT filter

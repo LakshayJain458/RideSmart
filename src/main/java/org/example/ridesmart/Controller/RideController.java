@@ -24,30 +24,16 @@ public class RideController {
     @Autowired
     private RideService rideService;
 
-    @Autowired
-    private UserRepo userRepo;
-
-    @Autowired
-    private DriverRepo driverRepo;
-
-
     @PostMapping("/book")
     public ResponseEntity<?> bookRide(@RequestBody RideBookingRequest bookingRequest) {
-        UserDetails user = userRepo.findById(bookingRequest.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
-        DriverProfile driver = driverRepo.findById(bookingRequest.getDriverId()).orElseThrow(() -> new RuntimeException("Driver not found"));
-
-        // Create the ride object
-        RideProfile ride = new RideProfile();
-        ride.setRider(user);
-        ride.setDriver(driver);
-        ride.setPickupLocation(bookingRequest.getPickupLocation());
-        ride.setDropoffLocation(bookingRequest.getDropoffLocation());
-        ride.setStatus(RideStatus.REQUESTED); // Initial status
-
-        // Save the ride to the database
-        RideProfile createdRide = rideService.createRide(ride);
-
-        return new ResponseEntity<>(createdRide, HttpStatus.CREATED);
+       RideProfile profile=rideService.sendRequest(bookingRequest);
+    if(profile!=null)
+    {
+        return new ResponseEntity<>(profile,HttpStatus.OK);
+    }
+    else {
+        return new ResponseEntity<>("Something wents wrong",HttpStatus.NOT_ACCEPTABLE);
+    }
     }
 }
 

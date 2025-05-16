@@ -46,7 +46,6 @@ public class UserService {
         if(userRepo.existsById(userDTO.getId()))
         {
             user.setName(userDTO.getName());
-            user.setLocation(userDTO.getLocation());
             user.setId(userDTO.getId());
             return userRepo.save(user);
         }
