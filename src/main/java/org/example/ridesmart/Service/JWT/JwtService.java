@@ -5,9 +5,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.example.ridesmart.Exception.InvalidJwtTokenException;
 import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,7 +21,11 @@ public class JwtService {
 
     private static final Logger log = Logger.getLogger(JwtService.class.getName());
 
-    private static final String SECRET = "TmV3U2VjcmV0S2V5Rm9ySldUU2lnbmluZ1B1cnBvc2VzMTIzNDU2Nzg=\r\n";
+    @Value("${jwt.secret}")
+    private String SECRET;
+
+    @Value("${jwt.expirationMs}")
+    private long EXPIRATION_MS;
 
     public String generateToken(String email) {
         Map<String, Object> claims = new HashMap<>();
@@ -29,7 +34,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(email)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 3)) // 3 minutes expiry time
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_MS))
                 .signWith(getKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -52,10 +57,12 @@ public class JwtService {
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(getKey())
-                    .build().parseClaimsJws(token).getBody();
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
         } catch (Exception e) {
             log.severe("Error parsing JWT token: " + e.getMessage());
-            throw new RuntimeException("Invalid JWT token", e);
+            throw new InvalidJwtTokenException("Invalid or expired JWT token");
         }
     }
 

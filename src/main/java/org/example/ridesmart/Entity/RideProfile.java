@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.ridesmart.Enum.RideStatus;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,25 +18,43 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class RideProfile {
 
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-   private String pickuplocation;
-   private String dropLocation;
-   private double km;
-   private int rideRating;
-   private Long rideDuration;
-   private LocalDateTime rideTime;
-   private Long cost;
-   @OneToOne
-   @JoinColumn(name = "user_id")
-   private UserDetails user;
+    @Column(nullable = false)
+    private String pickupLocation;
 
-   @OneToOne
-   @JoinColumn(name = "driver_id")
-   private DriverProfile driver;
-   @Enumerated(EnumType.STRING)
-   private RideStatus status;
+    @Column(nullable = false)
+    private String dropLocation;
 
+    @Column(nullable = false)
+    private double km;
+
+    private int rideRating;
+
+    private Long rideDuration;
+
+    private LocalDateTime rideTime;
+
+    @Column(nullable = false)
+    private BigDecimal cost;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserDetails user;
+
+    @ManyToOne
+    @JoinColumn(name = "driver_id")
+    private DriverProfile driver;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RideStatus status;
+
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }

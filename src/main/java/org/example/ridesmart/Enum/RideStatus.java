@@ -1,4 +1,5 @@
 package org.example.ridesmart.Enum;
+
 public enum RideStatus {
     REQUESTED,
     ACCEPTED,
